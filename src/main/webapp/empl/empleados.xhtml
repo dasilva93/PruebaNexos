@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>#{userManager.title}</title>
+</h:head>
+<body>
+	<h:form id="form">
+		<p:growl id="growl" showDetail="true" keepAlive="true" />
+		<h1>Gestion Empleados</h1>
+		<br />
+		<p:panelGrid columns="3">
+			<p:commandButton value="Crear Empleado"
+				actionListener="#{empleadoBean.limpiarEmpl()}"
+				oncomplete="PF('emplDlg').show()" update=":form1" />
+
+			<p:commandButton value="Ir index"
+				action="/index.xhmtl?faces-redirect=true" />
+
+			<p:commandButton value="Ir Departamentos" ajax="false"
+				action="/dpts/departamentos.xhmtl?faces-redirect=true" />
+		</p:panelGrid>
+		<br />
+		<p:dataTable id="tblEmpl" widgetVar="tblEmpl" style="width: 100%;"
+			value="#{empleadoBean.emplLst}" var="empl" rows="10" paginator="true"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+			rowsPerPageTemplate="10,15,20,{ShowAll|'Todos'}">
+
+			<p:column headerText="Id">
+				<p:outputLabel value="#{empl.id}" />
+			</p:column>
+
+			<p:column headerText="Tipo Documento">
+				<p:outputLabel value="#{empl.documento_tipo}" />
+			</p:column>
+
+			<p:column headerText="Numero Documento">
+				<p:outputLabel value="#{empl.documento_numero}" />
+			</p:column>
+
+			<p:column headerText="Nombres">
+				<p:outputLabel value="#{empl.nombres}" />
+			</p:column>
+
+			<p:column headerText="Apellidos">
+				<p:outputLabel value="#{empl.apellidos}" />
+			</p:column>
+
+			<p:column headerText="Departamento">
+				<p:outputLabel value="#{empl.departamentos_id.departamento_nombre}" />
+			</p:column>
+
+			<p:column headerText="Ciudad">
+				<p:outputLabel value="#{empl.ciudad}" />
+			</p:column>
+
+			<p:column headerText="Dirección">
+				<p:outputLabel value="#{empl.dirección}" />
+			</p:column>
+
+			<p:column headerText="Correo electrónico">
+				<p:outputLabel value="#{empl.correo_electrónico}" />
+			</p:column>
+
+			<p:column headerText="Telefono">
+				<p:outputLabel value="#{empl.telefono}" />
+			</p:column>
+
+			<p:column headerText="Fecha Creación">
+				<p:outputLabel value="#{empl.fecha_hora_crea}">
+					<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss a" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Fecha Modificación">
+				<p:outputLabel value="#{empl.fecha_hora_modifica}">
+					<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss a" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Editar">
+				<p:commandButton value="Editar"
+					actionListener="#{empleadoBean.selectEmpl(empl)}" update=":form1"
+					oncomplete="PF('emplDlg').show()" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+	<p:dialog id="emplDlg" widgetVar="emplDlg" modal="true"
+		resizable="true" header="Empleado"
+		style="max-height:98%;overflow:auto">
+		<h:form id="form1">
+			<p:panelGrid columns="2">
+				<p:outputLabel value="Tipo Documento" for="selTiDo" />
+				<p:selectOneRadio id="selTiDo"
+					value="#{empleadoBean.empl.documento_tipo}" required="true"
+					requiredMessage="Se necesita el Tipo de Documento">
+					<f:selectItem itemLabel="RC" itemValue="RC" />
+					<f:selectItem itemLabel="TI" itemValue="TI" />
+					<f:selectItem itemLabel="CC" itemValue="CC" />
+					<f:selectItem itemLabel="CE" itemValue="CE" />
+				</p:selectOneRadio>
+
+				<p:outputLabel value="Numero de Documento" for="inpDocNum" />
+				<p:inputText id="inpDocNum"
+					value="#{empleadoBean.empl.documento_numero}" required="true"
+					requiredMessage="Se necesita el Numero de Documento" />
+
+				<p:outputLabel value="Nombres" for="inpNomb" />
+				<p:inputText id="inpNomb" value="#{empleadoBean.empl.nombres}"
+					required="true" requiredMessage="Se necesita los Nombres" />
+
+				<p:outputLabel value="Apellidos" for="inpApel" />
+				<p:inputText id="inpApel" value="#{empleadoBean.empl.apellidos}"
+					required="true" requiredMessage="Se necesita los Apellidos" />
+
+				<p:outputLabel value="Departamento" for="selDept" />
+				<p:selectOneMenu id="selDept"
+					value="#{empleadoBean.empl.departamentos_id.id}" required="true"
+					requiredMessage="Se necesita el Departamento">
+					<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
+					<f:selectItems value="#{empleadoBean.dptoLst}" var="dpt"
+						itemLabel="#{dpt.departamento_nombre}" itemValue="#{dpt.id}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Ciudad" for="inpCiud" />
+				<p:inputText id="inpCiud" value="#{empleadoBean.empl.ciudad}"
+					required="true" requiredMessage="Se necesita la Ciudad " />
+
+				<p:outputLabel value="Dirección" for="inpDir" />
+				<p:inputText id="inpDir" value="#{empleadoBean.empl.dirección}"
+					required="true" requiredMessage="Se necesita la Dirección" />
+
+				<p:outputLabel value="Correo electrónico" for="inpCoEl" />
+				<p:inputText id="inpCoEl"
+					value="#{empleadoBean.empl.correo_electrónico}" required="true"
+					requiredMessage="Se necesita el Correo electrónico" />
+
+				<p:outputLabel value="Telefono" for="inpTel" />
+				<p:inputText id="inpTel" value="#{empleadoBean.empl.telefono}"
+					required="true" requiredMessage="Se necesita el Telefono" />
+
+				<p:commandButton value="Guardar"
+					rendered="#{empleadoBean.empl.id == 0}"
+					actionListener="#{empleadoBean.crearEmpl()}"
+					update=":form:growl, :form:tblEmpl" />
+				<p:commandButton value="Editar"
+					rendered="#{empleadoBean.empl.id != 0}"
+					actionListener="#{empleadoBean.editarEmpl()}"
+					update=":form:growl, :form:tblEmpl" />
+				<p:commandButton value="Eliminar"
+					rendered="#{empleadoBean.empl.id != 0}"
+					actionListener="#{empleadoBean.eliminarEmpl()}"
+					update=":form:growl, :form:tblEmpl" />
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</body>
+</html>

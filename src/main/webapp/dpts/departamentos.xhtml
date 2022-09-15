@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>#{userManager.title}</title>
+</h:head>
+<body>
+	<h:form id="form">
+		<p:growl id="growl" showDetail="true" keepAlive="true" />
+		<h1>Gestion Departamentos</h1>
+		<br />
+		<p:panelGrid columns="3">
+			<p:commandButton value="Crear Departamento"
+				actionListener="#{departamentosBean.limpiarDpto()}"
+				oncomplete="PF('dptDlg').show()" update=":form1" />
+
+			<p:commandButton value="Ir index"
+				action="/index.xhmtl?faces-redirect=true" />
+
+			<p:commandButton value="Ir Empleados" ajax="false"
+				action="/empl/empleados.xhmtl?faces-redirect=true" />
+		</p:panelGrid>
+		<br />
+		<p:dataTable id="tblDpt" widgetVar="tblDpt" style="width: 100%;"
+			value="#{departamentosBean.dptoLst}" var="dpt" rows="10"
+			paginator="true"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+			rowsPerPageTemplate="10,15,20,{ShowAll|'Todos'}">
+
+			<p:column headerText="Id">
+				<p:outputLabel value="#{dpt.id}" />
+			</p:column>
+
+			<p:column headerText="Codigo">
+				<p:outputLabel value="#{dpt.departamento_codigo}" />
+			</p:column>
+
+			<p:column headerText="Nombre">
+				<p:outputLabel value="#{dpt.departamento_nombre}" />
+			</p:column>
+
+			<p:column headerText="Fecha Creación">
+				<p:outputLabel value="#{dpt.fecha_hora_crea}">
+					<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss a" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Fecha Modificación">
+				<p:outputLabel value="#{dpt.fecha_hora_modifica}">
+					<f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss a" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Editar">
+				<p:commandButton value="Editar"
+					actionListener="#{departamentosBean.selectDpto(dpt)}"
+					update=":form1" oncomplete="PF('dptDlg').show()" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+	<p:dialog id="dptDlg" widgetVar="dptDlg" modal="true"
+		header="Departamento">
+		<h:form id="form1">
+			<p:panelGrid columns="2">
+				<p:outputLabel value="Codigo" for="inpDptoCodi" />
+				<p:inputText id="inpDptoCodi"
+					value="#{departamentosBean.dpto.departamento_codigo}"
+					required="true" requiredMessage="Se necesita el Codigo" />
+
+				<p:outputLabel value="Nombre" for="inpDptoNomb" />
+				<p:inputText id="inpDptoNomb"
+					value="#{departamentosBean.dpto.departamento_nombre}"
+					required="true" requiredMessage="Se necesita el Nombre" />
+
+				<p:commandButton value="Guardar"
+					rendered="#{departamentosBean.dpto.id == 0}"
+					actionListener="#{departamentosBean.crearDpto()}"
+					update=":form:growl, :form:tblDpt" />
+				<p:commandButton value="Editar"
+					rendered="#{departamentosBean.dpto.id != 0}"
+					actionListener="#{departamentosBean.editarDpto()}"
+					update=":form:growl, :form:tblDpt" />
+				<p:commandButton value="Eliminar"
+					rendered="#{departamentosBean.dpto.id != 0}"
+					actionListener="#{departamentosBean.eliminarDpto()}"
+					update=":form:growl, :form:tblDpt" />
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</body>
+</html>

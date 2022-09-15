@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>#{userManager.title}</title>
+</h:head>
+<body>
+	<h1>#{userManager.title}</h1>
+	<br />
+	<h:form>
+		<p:panelGrid columns="2">
+			<p:commandButton value="Ir Departamenos" ajax="false"
+				action="dpts/departamentos.xhmtl?faces-redirect=true" />
+
+			<p:commandButton value="Ir Empleados" ajax="false"
+				action="empl/empleados.xhmtl?faces-redirect=true" />
+		</p:panelGrid>
+	</h:form>
+
+
+</body>
+</html>
