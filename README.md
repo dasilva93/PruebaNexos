@@ -4,10 +4,10 @@ Prueba técnica desarrollador Java para la compañia nexos software realizada po
 
 #Especificaciones
 
-Java 11
-PrimeFaces 11
-h2 2.1.214
-hibernate 6.1.3
+Java 11.
+PrimeFaces 11.
+h2 2.1.214.
+hibernate 6.1.3.
 
 # Proceso de instalacion
 
